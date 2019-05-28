@@ -11,8 +11,12 @@ Lve.prototype.$mount = function(el) {
 
 
 Lve.prototype._render = function() {
-	let voden = '<div>voden</div>'
-	return voden
+	const vm = this
+
+	// creatVnode()
+	// ast to render to voden
+
+	return vm.ast
 }
 
 Lve.prototype._patch = patch
