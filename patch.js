@@ -1,40 +1,79 @@
 import {insert} from './unit'
 
+import {act} from './unit'
 
+let o ;
+let nowdiv;
 function createElement(vnode){
-	const {name,value} = vnode
+	const {name,value,component} = vnode
 	
-	// if(name.indexOf('com')==0) {
-	// 		console.log(vnode)
-	// 		return 
-	// }else {
-		const elm = document.createElement(name)
-		if(value) {
-			elm.textContent = vnode.value.name
-		}
-		return elm
-	// }
+	if(component) {
+		// debugger
+		vnode.sub({
+			template:'<p>ppp</p>',
+			ctag:'p',
+			component:true,
+			parent:act.current.ast
+		})
+
+
+	}
+
+	const elm = document.createElement(name)
+
+	// console.log(elm)
+	if(value) {
+		elm.textContent = vnode.value.name
+	}
+	debugger// o =elm
+	console.log(elm)
+	// nowdiv = elm
+	return elm
 	
 }
 
 function createElm(oldVnode,vnode) {
 
 	const tag = createElement(vnode)
-
 	if(vnode.child) {
 		createElm(tag,vnode.child)
 	}
-
+	// debugger
 	insert(oldVnode,tag)
+	return oldVnode
 }
 
 
 function path(oldVnode, vnode) {
 	// debugger
 
-	//首次渲染oldVnode是真实节点
-	
+	let parElm
+	//组件
+	// debugger
+	if(oldVnode.name) {
+		parElm = document.createElement(oldVnode.name)
+		const o = createElm(parElm,vnode)
+		// var b = document.querySelector('body')
+		// let a= Object.assign(nowdiv)
+		// console.log(nowdiv)
+		insert(nowdiv,o)
+		//移除旧
+		// remov()
+	}else {
+		parElm = document.querySelector(oldVnode)
+		 nowdiv = parElm
+		createElm(parElm,vnode)
+	}
+	// const 
+
+	// console.log(parElm)
 	// console.log(vnode)
-	createElm(oldVnode,vnode)
+
+
+	
+
+	// console.log(vnode)
+
+	// insert(parElm)
 }
 export default path
