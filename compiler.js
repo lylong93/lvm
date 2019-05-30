@@ -1,24 +1,29 @@
 
 
-function tml(template){
+function tml(template,data){
 	// 使用？ 变为非贪婪模式
 	const startExp = new RegExp(/<[^/]+?>/g)
 
 	const endExp = new RegExp(/<\/[a-z]+>/g)
 
-	const tetExp = new RegExp(/[ a-z]+</g)
+	const tetExp = new RegExp(/[ \Sa-z]+</g)
+
+	// 响应式
+	const reExp = new RegExp(/{{[ \Sa-z]}}/g)
 
 	const ELEMENTTYPE= 1
 	const TEXTTYPE= 2
 
-	let Asts 
+	let Asts
 	let currentAst
 	// debugger
 	while(template) {
+
 		let startTag = template.match(startExp)
 		let endTag = template.match(endExp)
 		
 		const teTag = template.match(tetExp)
+		
 
 		let step 
 		// debugger
@@ -62,6 +67,7 @@ function tml(template){
 	}
 
 	function _create(tag,type) {
+		//分解标签可获得更多属性以便实现 事件 样式
 
 		const tagarr = tag.replace(/[<|>]/g,'').split(' ')
 	
@@ -80,12 +86,23 @@ function tml(template){
 			Asts=ast
 			currentAst = ast
 		} else {
-
 			if(type === ELEMENTTYPE) {
 				currentAst.child=ast
 				currentAst = ast
 			} else {
-				currentAst.value=ast
+				//如果是内容元素替换{{}}
+				// 触发了get
+				// if(ast.name.match(reExp)) {
+				// 	ast.name = ast.name.replace(reExp,function() {
+				// 		const i = ast.name.match(/\{\{(.*)\}\}/)[1] // 贪婪匹配到 {{}}中内容
+				// 		return data[i]
+				// 	})
+				// 	// console.log(ast)
+				// 	currentAst.value=ast
+				// }else {
+					currentAst.value=ast
+				// }
+				
 			}
 			
 		}
@@ -96,8 +113,11 @@ function tml(template){
 }
 
 
-function parse (template) {
-	const asts = tml(template)
+function parse (vm) {
+	let template = vm.$options.template
+	let _data = vm._data
+
+	const asts = tml(template,_data)
 
 	return asts
 }

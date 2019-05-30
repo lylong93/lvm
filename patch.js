@@ -16,7 +16,6 @@ function createElement(vnode){
 			parent:act.current.ast
 		})
 
-
 	}
 
 	const elm = document.createElement(name)
@@ -25,14 +24,18 @@ function createElement(vnode){
 	if(value) {
 		elm.textContent = vnode.value.name
 	}
-	debugger// o =elm
-	console.log(elm)
+	// debugger// o =elm
+	// console.log(elm)
 	// nowdiv = elm
 	return elm
 	
 }
 
 function createElm(oldVnode,vnode) {
+
+	// 可以用一个栈结构管理当前的作用对象,使insert到正确的父节点
+	// stack
+	// 未实现
 
 	const tag = createElement(vnode)
 	if(vnode.child) {
